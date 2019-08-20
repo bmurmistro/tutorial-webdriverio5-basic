@@ -47,6 +47,12 @@ describe('wdio5', function () {
 
     eyes = new Eyes(runner);
 
+    if (!process.env.APPLITOOLS_API_KEY) {
+      console.log("Please set the APPLITOOLS_API_KEY environment variable");
+      process.exit(0);
+    }
+    eyes.setApiKey(process.env.APPLITOOLS_API_KEY);
+
     const configuration = new Configuration();
     configuration.setAppName('Demo App');
     configuration.setTestName('Smoke Test');

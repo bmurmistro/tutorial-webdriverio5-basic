@@ -1,0 +1,20 @@
+# we use a pre-build docker image instead of a Dockerfile, because we can pre-fetch that onto Gitpod infrastructure.
+image: meysholdt/applitools-dev-environment:latest
+ports:
+
+  # open up the port for VNC
+  - port: 6080
+    onOpen: open-preview
+
+  # ignore all other ports
+  - port: 1-6079
+    onOpen: ignore
+  - port: 6081-65534
+    onOpen: ignore
+tasks:
+
+- init: |
+    npm install
+  command: |
+    gp open test/example-classic.js
+    npm test
