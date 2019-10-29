@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/applitools/tutorial-webdriverio5-basic#readme",
   "devDependencies": {
-    "@applitools/eyes-selenium": "^4.22.2",
-    "@applitools/eyes-webdriverio": "^5.5.0",
-    "mocha": "^6.1.4"
+    "@applitools/eyes-selenium": "^4.31.9",
+    "@applitools/eyes-webdriverio": "^5.8.1",
+    "mocha": "^6.2.2"
   }
 }
