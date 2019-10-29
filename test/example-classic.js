@@ -34,6 +34,7 @@ describe('wdio5', function () {
 
     const results = await eyes.getRunner().getAllTestResults(false);
     console.log(results);
+    console.log(results.getAllResults());
   });
 
   after(async function () {
