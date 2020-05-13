@@ -1,13 +1,14 @@
 'use strict';
 
-const chromedriver = require('chromedriver');
 const {remote} = require('webdriverio');
 const {
-  ClassicRunner,
-  Eyes,
-  Target
+    ClassicRunner,
+    Eyes,
+    Target,
+    Configuration,
+    RectangleSize,
+    BatchInfo
 } = require('@applitools/eyes-webdriverio');
-const {Configuration} = require('@applitools/eyes-selenium');
 
 
 let browser;
@@ -15,60 +16,74 @@ let eyes;
 
 describe('wdio5', function () {
 
-  before(async function () {
-    chromedriver.start();
-  });
 
-  beforeEach(async () => {
-    const chrome = {
-      capabilities: {
-        browserName: 'chrome'
-      }
-    };
-    browser = await remote(chrome);
-  });
+    beforeEach(async () => {
+        // Use chrome browser
+        const chrome = {
+            capabilities: {
+                browserName: 'chrome'
+            },
+            logLevel: 'silent',
+        };
+        // Use Chrome browser
+        browser = await remote(chrome);
 
-  afterEach(async () => {
-    await browser.deleteSession();
-    await eyes.abortIfNotClosed();
+        // Initialize the Runner for your test.
+        const runner = new ClassicRunner();
 
-    const results = await eyes.getRunner().getAllTestResults(false);
-    console.log(results);
-    console.log(results.getAllResults());
-  });
+        // Initialize the eyes SDK
+        eyes = new Eyes(runner);
 
-  after(async function () {
-    chromedriver.stop();
-  });
+        // Initialize the eyes configuration
+        const configuration = new Configuration();
 
-  it('Classic Runner Test', async () => {
-    await browser.url('https://demo.applitools.com');
+        // You can get your api key from the Applitools dashboard
+        configuration.setApiKey('APPLITOOLS_API_KEY')
 
-    const runner = new ClassicRunner();
+        // Set new batch
+        configuration.setBatch(new BatchInfo('Demo batch'))
 
-    eyes = new Eyes(runner);
+        // Set the configuration to eyes
+        eyes.setConfiguration(configuration);
+    });
 
-    const configuration = new Configuration();
-    configuration.setAppName('Demo App');
-    configuration.setTestName('Smoke Test');
 
-    eyes.setConfiguration(configuration);
-    await eyes.open(browser);
+    it('Classic Runner Test', async () => {
 
-    await browser.url('https://demo.applitools.com');
+        // Start the test by setting AUT's name, test name and viewport size (width X height)
+        await eyes.open(browser, 'Demo App', 'Smoke Test', new RectangleSize(800, 600));
 
-    // Visual checkpoint #1.
-    await eyes.check('Login Window', Target.window());
+        // Navigate the browser to the "ACME" demo app.
+        await browser.url('https://demo.applitools.com');
 
-    // Click the "Log in" button.
-    // await driver.click(By.id('log-in'));
-    const loginButton = await browser.$('#log-in');
-    await loginButton.click();
+        // To see visual bugs after the first run, use the commented line below instead.
+        // await driver.url("https://demo.applitools.com/index_v2.html");
 
-    // Visual checkpoint #2.
-    await eyes.check('App Window', Target.window());
+        // Visual checkpoint #1.
+        await eyes.check('Login Window', Target.window().fully());
 
-    await eyes.closeAsync();
-  });
+        // Click the "Log in" button.
+        const loginButton = await browser.$('#log-in');
+        await loginButton.click();
+
+        // Visual checkpoint #2.
+        await eyes.check('App Window', Target.window().fully());
+
+        // End the test
+        await eyes.closeAsync();
+    });
+
+    afterEach(async () => {
+        // Close the browser
+        await browser.deleteSession();
+
+        // If the test was aborted before eyes.close was called, ends the test as aborted.
+        await eyes.abortIfNotClosed();
+
+        // Wait and collect all test results
+        const results = await eyes.getRunner().getAllTestResults(false);
+        console.log(results);
+        console.log(results.getAllResults());
+    });
 
 });
