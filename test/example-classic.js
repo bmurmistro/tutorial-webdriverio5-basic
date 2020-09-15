@@ -39,9 +39,11 @@ describe('wdio5', function () {
 
         // You can get your api key from the Applitools dashboard
         configuration.setApiKey(process.env.APPLITOOLS_API_KEY)
-
+        
+        const batch = new BatchInfo(null);
+        batch.setId(process.env.APPLITOOLS_BATCH_ID)
         // Set new batch
-        configuration.setBatch(new BatchInfo('Demo batch'))
+        configuration.setBatch(batch)
 
         // Set the configuration to eyes
         eyes.setConfiguration(configuration);
