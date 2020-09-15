@@ -38,7 +38,7 @@ describe('wdio5', function () {
         const configuration = new Configuration();
 
         // You can get your api key from the Applitools dashboard
-        configuration.setApiKey('APPLITOOLS_API_KEY')
+        //configuration.setApiKey('APPLITOOLS_API_KEY')
 
         // Set new batch
         configuration.setBatch(new BatchInfo('Demo batch'))
@@ -51,22 +51,11 @@ describe('wdio5', function () {
     it('Classic Runner Test', async () => {
 
         // Start the test by setting AUT's name, test name and viewport size (width X height)
-        await eyes.open(browser, 'Demo App', 'Smoke Test', new RectangleSize(800, 600));
+        await eyes.open(browser, 'Hello World', 'Test', new RectangleSize(800, 600));
 
         // Navigate the browser to the "ACME" demo app.
-        await browser.url('https://demo.applitools.com');
+        await browser.url('https://applitools.com/helloworld');
 
-        // To see visual bugs after the first run, use the commented line below instead.
-        // await driver.url("https://demo.applitools.com/index_v2.html");
-
-        // Visual checkpoint #1.
-        await eyes.check('Login Window', Target.window().fully());
-
-        // Click the "Log in" button.
-        const loginButton = await browser.$('#log-in');
-        await loginButton.click();
-
-        // Visual checkpoint #2.
         await eyes.check('App Window', Target.window().fully());
 
         // End the test
