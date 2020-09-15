@@ -39,9 +39,11 @@ describe('wdio5', function () {
 
         // You can get your api key from the Applitools dashboard
         configuration.setApiKey(process.env.APPLITOOLS_API_KEY)
-
+        
+        const batch = new BatchInfo(null);
+        batch.setId(process.env.APPLITOOLS_BATCH_ID)
         // Set new batch
-        configuration.setBatch(new BatchInfo('Demo batch'))
+        configuration.setBatch(batch)
 
         // Set the configuration to eyes
         eyes.setConfiguration(configuration);
@@ -54,7 +56,7 @@ describe('wdio5', function () {
         await eyes.open(browser, 'Hello World', 'Test', new RectangleSize(800, 600));
 
         // Navigate the browser to the "ACME" demo app.
-        await browser.url('https://applitools.com/helloworld');
+        await browser.url('https://applitools.com/helloworld2');
 
         await eyes.check('App Window', Target.window().fully());
 
