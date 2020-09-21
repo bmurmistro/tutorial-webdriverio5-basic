@@ -56,7 +56,7 @@ describe('wdio5', function () {
         await eyes.open(browser, 'Hello World', 'Test', new RectangleSize(800, 600));
 
         // Navigate the browser to the "ACME" demo app.
-        await browser.url('https://applitools.com/helloworld2');
+        await browser.url('https://applitools.com/helloworld');
 
         await eyes.check('App Window', Target.window().fully());
 
