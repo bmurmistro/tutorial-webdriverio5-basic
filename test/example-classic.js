@@ -35,16 +35,15 @@ describe('wdio5', function () {
         eyes = new Eyes(runner);
 
         // Initialize the eyes configuration
-        const configuration = new Configuration();
+        const configuration = eyes.getConfiguration();
 
         // You can get your api key from the Applitools dashboard
         configuration.setApiKey(process.env.APPLITOOLS_API_KEY)
         
-        const batch = new BatchInfo(null);
-        //batch.setId(process.env.APPLITOOLS_BATCH_ID)
+        const batch = new BatchInfo("B");
+        batch.setId("b5")
         // Set new batch
         configuration.setBatch(batch)
-
         // Set the configuration to eyes
         eyes.setConfiguration(configuration);
     });
@@ -58,23 +57,41 @@ describe('wdio5', function () {
         // Navigate the browser to the "ACME" demo app.
         await browser.url('https://applitools.com/helloworld');
 
-        await eyes.check('App Window', Target.window().fully());
+        await eyes.check('App Window', 'Test1', Target.window().fully());
 
         // End the test
         await eyes.closeAsync();
+        // Close the browser
+        await browser.deleteSession();
+        // Wait and collect all test results
+        const results = await eyes.getRunner().getAllTestResults(true);
+        console.log(results);
+
+    });
+    it('Classic Runner Test2', async () => {
+
+        // Start the test by setting AUT's name, test name and viewport size (width X height)
+        await eyes.open(browser, 'Hello World', 'Test', new RectangleSize(800, 600));
+
+        // Navigate the browser to the "ACME" demo app.
+        await browser.url('https://applitools.com/helloworld2');
+
+        await eyes.check('App Window', 'Test2', Target.window().fully());
+
+        // End the test
+        await eyes.closeAsync();
+        // Close the browser
+        await browser.deleteSession();
+        // Wait and collect all test results
+        const results = await eyes.getRunner().getAllTestResults(true);
+        console.log(results);
+
     });
 
     afterEach(async () => {
-        // Close the browser
-        await browser.deleteSession();
 
         // If the test was aborted before eyes.close was called, ends the test as aborted.
         await eyes.abortIfNotClosed();
-
-        // Wait and collect all test results
-        const results = await eyes.getRunner().getAllTestResults(false);
-        console.log(results);
-        console.log(results.getAllResults());
     });
 
 });
