@@ -41,7 +41,7 @@ describe('wdio5', function () {
         configuration.setApiKey(process.env.APPLITOOLS_API_KEY)
         
         const batch = new BatchInfo("B");
-        batch.setId("b10")
+        batch.setId("b11")
         // Set new batch
         configuration.setBatch(batch)
         // Set the configuration to eyes
